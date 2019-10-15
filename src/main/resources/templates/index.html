@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- 引入bootstrap-table样式 -->
+<link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
+<!-- 日期控件-->
+<link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
+      rel="stylesheet">
+
+<body>
+<div>
+    <img src="../photo/3.png" style="margin: 1px 1px 0px 1px;width: 100%;">
+</div>
+<hr align=center color=#987cb9 size=1/>
+<div style="margin: 10px 5px 15px 5px;">
+    <ul id="myTab" class="nav nav-tabs">
+        <li class="active"><a href="#home" data-toggle="tab">个人问题</a></li>
+        <li><a href="#ios" data-toggle="tab">业务学习</a></li>
+        <li class="dropdown">
+            <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">
+                待开发
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+                <li>
+                    <a href="#jmeter" tabindex="-1" data-toggle="tab">
+                        待开发
+                    </a>
+                </li>
+                <li>
+                    <a href="#ejb" tabindex="-1" data-toggle="tab">
+                        待开发
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="home">
+            <div style="margin-left: 150px;margin-top: 30px">
+                    <form class="form-inline" role="form">
+                        <div class='input-group date' id='start'>
+                            <input type='text' class="form-control" placeholder="请输入日期" id="date"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"/>
+                            </span>
+                        </div>
+                        -
+                        <div class='input-group date' id='end'>
+                            <input type='text' class="form-control" placeholder="请输入日期" id="date1"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"/>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="driver">名称</label>
+                            <input type="text" class="form-control" id="driver" placeholder="请输入姓名或固编">
+                        </div>
+                        <div class="form-group">
+                            <button type="reset" id="reset" class="btn btn-default">重置</button>
+                            <button type="button" id="submit" class="btn btn-default">查询</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="ios">
+            <div style="margin-left: 150px;margin-top: 30px;">
+                    <form class="form-inline" role="form">
+                        <div class='input-group date' id=''>
+                            <input type='text' class="form-control" placeholder="请输入日期" id="datestart1"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"/>
+                            </span>
+                        </div>
+                        <div class='input-group date' id='end1'>
+                            <input type='text' class="form-control" placeholder="" id="date1end1"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"/>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="driver">名称</label>
+                            <input type="text" class="form-control" id="driver1" placeholder="请输入关键字">
+                        </div>
+                        <button type="reset" id="reset1" class="btn btn-default">重置</button>
+                        <button type="button" id="submit1" class="btn btn-default">查询</button>
+                    </form>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="jmeter">
+            <p>待开发</p>
+        </div>
+        <div class="tab-pane fade" id="ejb">
+            <p>待开发</p>
+        </div>
+    </div>
+    <div calss="divider"></div>
+    <div id="isDisplay" style="display: none">
+        <!--定义table-->
+        <table id="table"></table>
+    </div>
+</div>
+</body>
+
+<script src="../js/jquery-3.2.1/jquery-3.2.1.min.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<!-- bootstrap-table.min.js -->
+<script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+<!-- 引入中文语言包 -->
+<script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+<!-- 日期控件-->
+<script src="https://cdn.bootcss.com/moment.js/2.22.0/moment-with-locales.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script>
+    $(function () {
+        $('#myTab li:eq(1) a').tab('show');
+        table();
+        dataTimeRange();
+    })
+    function table(){
+        $("#table").bootstrapTable({// 对应table标签的id
+            method: 'post',
+            url: "/index", // 获取表格数据的url
+            contentType: "application/x-www-form-urlencoded",//一种编码。好像在post请求的时候需要用到。这里用的get请求，注释掉这句话也能拿到数据
+            dataField: "data",//这是返回的json数组的key.默认是"rows".这里只有前后端约定好就行
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+            striped: true,  //表格显示条纹，默认为false
+            pagination: true, // 在表格底部显示分页组件，默认false
+            pageList: [10, 20, 50, 100, 200, 500], // 如果设置了分页，设置可供选择的页面数据条数。设置为All 则显示所有记录。
+            pageSize: 10, // 页面数据条数
+            pageNumber: 1, // 初始化加载第一页，默认第一页
+            sidePagination: 'server', // 设置为服务器端分页     客户端：client
+            search: false,
+            toolbar: '#toolbar',//指定工具栏
+            searchOnEnterKey: true, //设置为 true时，按回车触发搜索方法，否则自动触发搜索方法
+            undefinedText: '---', //当数据为 undefined 时显示的字符
+            singleSelect: false,//设置True 将禁止多选
+            clickToSelect: true,//设置true 将在点击行时，自动选择rediobox 和 checkbox
+            height: 700,     //定义表格的高度。
+            searchTimeOut: 500,// 默认500  设置搜索超时时间。
+            toolbarAlign: 'right',// 指定 toolbar 水平方向的位置。'left' 或 'right'
+            paginationDetailHAlign: 'left',//指定 分页详细信息 在水平方向的位置。'left' 或 'right'。
+            showHeader: true,//是否显示列头。
+            trimOnSearch: true,//设置为 true 将自动去掉搜索字符的前后空格。
+            rowStyle: function (row, index) {
+                var style = {
+                    // css: { 'height': '10px', 'font-size': 'small', 'classes':'danger'}
+                };
+
+                return style;
+            },
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+                return {
+                    pageSize: params.limit, // 每页要显示的数据条数
+                    pageNum: params.offset / params.limit + 1, // 每页显示数据的开始行号
+                    sort: params.sort, // 要排序的字段
+                    sortOrder: params.order, // 排序规则
+                    search: params.search, //搜索框内容
+                    date: $("#date").val(),
+                    locomotive: $("#locomotive").val(),
+                    trainNumber: $("#trainNumber").val(),
+                    driver: $("#driver").val(),
+                    learningDriver: $("#learningDriver").val(),
+                    questionCategory: $("#questionCategory").val(),
+                    monitorAction: $("#monitorAction").val(),
+                    monitorProblem: $("#monitorProblem").val(),
+                    brakeProblem: $("#brakeProblem").val(),
+                    manipulationProblem: $("#manipulationProblem").val(),
+                    shuntingProblem: $("#shuntingProblem").val(),
+                    violationInfo: $("#violationInfo").val(),
+                    fixedResponsibility: $("#fixedResponsibility").val(),
+                    assessmentProcessing: $("#assessmentProcessing").val(),
+                    workshop: $("#workshop").val(),
+                    remarke: $("#remarke").val()
+                }
+            },
+            sortName: 'id', // 要排序的字段
+            sortOrder: 'desc', // 排序规则
+            columns: [
+                {
+                    field: 'id', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '序号', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'date',
+                    title: '日期',
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    field: 'locomotive',
+                    title: '机车',
+                    align: 'center',      //设置单元格数据的左右对齐方式， 可选择的值有：’left’, ‘right’, ‘center’
+                    valign: 'middle'   //设置单元格数据的上下对齐方式， 可选择的值有：’top’, ‘middle’, ‘bottom’
+                }, {
+                    field: 'trainNumber',
+                    title: "车次",
+                    align: 'center',
+                    valign: 'middle',
+                }, {
+                    field: 'driver', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '司机', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'learningDriver', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '学习司机', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'questionCategory', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '问题类别', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'monitorAction', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '监控器动作', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'monitorProblem', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '监控器问题', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'brakeProblem', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '制动机问题', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'manipulationProblem', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '操纵问题', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'shuntingProblem', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '调车问题', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'violationInfo', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '违标信息', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'fixedResponsibility', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '定责', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'assessmentProcessing', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '考核处理情况', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'workshop', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '车间', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }, {
+                    field: 'remarke', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '备注', // 表格表头显示文字
+                    align: 'center', // 左右居中
+                    valign: 'middle', // 上下居中
+                    visible: true
+                }
+            ],
+            onLoadSuccess: function (result) {  //加载成功时执行
+                console.info("加载成功");
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.info("加载数据失败");
+            }
+
+        })
+    }
+
+    //查询
+    $('#submit').click(function () {
+        // table();
+        //查询之后重新从第一页算起
+        $('#table').bootstrapTable('refreshOptions', {pageNumber: 1, pageSize: 10});
+        //刷新
+        //  $('#table').bootstrapTable('refresh');
+    });
+
+    function dataTimeRange(){//日期范围
+        $('#start').datetimepicker({
+            format:'YYYY-MM-DD',
+            locale: moment.locale('zh-cn')
+        }).on('changeDate',function(e){
+            var startTime = e.date;
+            $('#end').datepicker('setStartDate',startTime);
+        });
+
+        //结束时间
+        $('#end').datetimepicker({
+            format:'YYYY-MM-DD',
+            locale: moment.locale('zh-cn')
+        }).on('changeDate',function(e){
+            var endTime = e.date;
+            $('#start').datepicker('setEndDate',endTime);
+        });
+    }
+
+       /* $('#datetimepicker').datetimepicker({
+            format: 'YYYY-MM-DD',
+            locale: moment.locale('zh-cn')
+        });*/
+        /*$('#datetimepicker2').datetimepicker({
+            format: 'YYYY-MM-DD hh:mm',
+            locale: moment.locale('zh-cn')
+        });*/
+</script>
+</html>

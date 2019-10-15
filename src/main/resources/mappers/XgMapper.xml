@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.xg.mapper.XgMapper">
+
+    <sql id="Sql_field">
+        id,date,locomotive,train_number,driver,learning_driver,question_category,
+        monitor_action,monitor_problem,brake_problem,manipulation_problem,shunting_problem,
+        violation_info,fixed_responsibility,assessment_processing,workshop,remarke
+    </sql>
+
+    <select id="selectXgByCondition" resultType="com.test.xg.bean.Xg">
+       select <include refid="Sql_field"/> from xg
+       <where>
+           <if test="date != null and date != ''">
+               and `date` = #{date}
+           </if>
+           <if test="locomotive != null and locomotive != '' ">
+               and `locomotive` = #{locomotive}
+           </if>
+           <if test="trainNumber != null and trainNumber != '' ">
+               and `train_number` = #{trainNumber}
+           </if>
+           <if test="driver != null and driver != '' ">
+               and `driver` like concat(concat('%',#{driver}),'%')
+           </if>
+           <if test="learningDriver != null and learningDriver != '' ">
+               and `learning_driver` = #{learningDriver}
+           </if>
+           <if test="questionCategory != null and questionCategory != '' ">
+               and `question_category` = #{questionCategory}
+           </if>
+           <if test="monitorAction != null and monitorAction != '' ">
+               and `monitor_action` = #{monitorAction}
+           </if>
+           <if test="monitorProblem != null and monitorProblem != '' ">
+               and `monitor_problem` = #{monitorProblem}
+           </if>
+           <if test="brakeProblem != null and brakeProblem != '' ">
+               and `brake_problem` = #{brakeProblem}
+           </if>
+           <if test="manipulationProblem != null and manipulationProblem != '' ">
+               and `manipulation_problem` = #{manipulationProblem}
+           </if>
+           <if test="shuntingProblem != null and shuntingProblem != '' ">
+               and `shunting_problem` = #{shuntingProblem}
+           </if>
+           <if test="violationInfo != null and violationInfo != '' ">
+               and `violation_info` = #{violationInfo}
+           </if>
+           <if test="fixedResponsibility != null and fixedResponsibility != '' ">
+               and `fixed_responsibility` = #{fixedResponsibility}
+           </if>
+           <if test="assessmentProcessing != null and assessmentProcessing != '' ">
+               and `assessment_processing` = #{assessmentProcessing}
+           </if>
+           <if test="workshop != null and workshop != '' ">
+               and `workshop` = #{workshop}
+           </if>
+           <if test="remarke != null and remarke != '' ">
+               and `remarke` = #{remarke}
+           </if>
+       </where>
+    </select>
+</mapper>
