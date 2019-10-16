@@ -88,10 +88,10 @@ public class ImportExcelUtils {
     public  Object getCellValue(Cell cell){  
         Object value = null;  
         DecimalFormat df = new DecimalFormat("0");  //格式化number String字符
-        SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");  //日期格式化
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  //日期格式化
         DecimalFormat df2 = new DecimalFormat("0.00");  //格式化数字  
 
-        switch (cell.getCellType()) {  
+        switch (cell.getCellType()) {
         case Cell.CELL_TYPE_STRING:  
             value = cell.getRichStringCellValue().getString();  
             break;  
@@ -100,7 +100,9 @@ public class ImportExcelUtils {
                 value = df.format(cell.getNumericCellValue());  
             }else if("m/d/yy".equals(cell.getCellStyle().getDataFormatString())){  
                 value = sdf.format(cell.getDateCellValue());  
-            }else{  
+            }else if("yyyy-mm-dd".equals(cell.getCellStyle().getDataFormatString())){
+                value = sdf.format(cell.getDateCellValue());
+            }else{
                 value = df2.format(cell.getNumericCellValue());  
             }  
             break;  

@@ -80,4 +80,22 @@
             (#{notice.date},#{notice.notice})
         </foreach>
     </insert>
+
+    <select id="selectPersonalProblemByCondition" resultType="com.test.xg.bean.PersonalProblem">
+        select id,name,fixed_number,subordinate_team,checking_content,date,train_number,
+        locomotive, existing_problems, measures,remake
+        from personal_problem
+        <where>
+            <if test="beginTime != null and beginTime != ''">
+                and `date` &gt;= #{beginTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and `date` &lt;= #{endTime}
+            </if>
+            <if test="name != null and name != '' ">
+                and (`name` like CONCAT(CONCAT('%',#{name}),'%')
+                or fixed_number = #{name})
+            </if>
+        </where>
+    </select>
 </mapper>

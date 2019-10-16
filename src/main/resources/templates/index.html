@@ -10,6 +10,8 @@
 <!-- 日期控件-->
 <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
       rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.6/css/fileinput.min.css" media="all"
+      rel="stylesheet" type="text/css"/>
 
 <body>
 <div>
@@ -42,61 +44,126 @@
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade in active" id="home">
             <div style="margin-left: 150px;margin-top: 30px">
-                    <form class="form-inline" role="form">
-                        <div class='input-group date' id='start'>
-                            <input type='text' class="form-control" placeholder="请输入日期" id="date"/>
-                            <span class="input-group-addon">
+                <form class="form-inline" role="form">
+                    <div class='input-group date' id='start'>
+                        <input type='text' class="form-control" placeholder="请输入日期" id="date"/>
+                        <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"/>
                             </span>
-                        </div>
-                        -
-                        <div class='input-group date' id='end'>
-                            <input type='text' class="form-control" placeholder="请输入日期" id="date1"/>
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"/>
-                            </span>
-                        </div>
-                        <div class="form-group">
-                            <label class="sr-only" for="driver">名称</label>
-                            <input type="text" class="form-control" id="driver" placeholder="请输入姓名或固编">
-                        </div>
-                        <div class="form-group">
-                            <button type="reset" id="reset" class="btn btn-default">重置</button>
-                            <button type="button" id="submit" class="btn btn-default">查询</button>
-                        </div>
-                    </form>
-                    <div>
-                        <form id="ffImport" method="post">
-                            <div title="Excel导入操作" style="padding: 5px">
-                                <input type="hidden" id="AttachGUID" name="AttachGUID" />
-                                <input id="excelFile" type="file">
-                            </div>
-                        </form>
                     </div>
+                    -
+                    <div class='input-group date' id='end'>
+                        <input type='text' class="form-control" placeholder="请输入日期" id="date1"/>
+                        <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"/>
+                            </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="name">名称</label>
+                        <input type="text" class="form-control" id="name" placeholder="请输入姓名或固编">
+                    </div>
+                    <div class="form-group">
+                        <button type="reset" id="reset" class="btn btn-default">重置</button>
+                        <button type="button" id="submit" class="btn btn-default">查询</button>
+                    </div>
+                </form>
+                <div>
+                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal"
+                            style="height: 40px;width: 90px">
+                        导入
+                    </button>
+                    <!-- 模态框（Modal） -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        ×
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        导入excel
+                                    </h4>
+                                </div>
+                                <div class="modal-body"><!-- 在这里添加一些文本 -->
+                                    <form id="importFile" name="importFile" class="form-horizontal" method="post"
+                                          enctype="multipart/form-data">
+                                        <div>
+                                            <label class="control-label">请选择要导入的excel文件：</label>
+                                            <input id="excelFile" name="excelFile" class="file-loading" type="file"
+                                                   multiple accept=".xls,.xlsx">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+                </div>
+                <div id="isDisplay">
+                    <!--定义table-->
+                    <table id="table"></table>
+                </div>
             </div>
         </div>
         <div class="tab-pane fade" id="ios">
             <div style="margin-left: 150px;margin-top: 30px;">
-                    <form class="form-inline" role="form">
-                        <div class='input-group date' id=''>
-                            <input type='text' class="form-control" placeholder="请输入日期" id="datestart1"/>
-                            <span class="input-group-addon">
+                <form class="form-inline" role="form">
+                    <div class='input-group date' id='start1'>
+                        <input type='text' class="form-control" placeholder="请输入日期" id="date2"/>
+                        <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"/>
                             </span>
-                        </div>
-                        <div class='input-group date' id='end1'>
-                            <input type='text' class="form-control" placeholder="" id="date1end1"/>
-                            <span class="input-group-addon">
+                    </div>
+                    -
+                    <div class='input-group date' id='end1'>
+                        <input type='text' class="form-control" placeholder="请输入日期" id="date3"/>
+                        <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"/>
                             </span>
-                        </div>
-                        <div class="form-group">
-                            <label class="sr-only" for="driver">名称</label>
-                            <input type="text" class="form-control" id="driver1" placeholder="请输入关键字">
-                        </div>
-                        <button type="reset" id="reset1" class="btn btn-default">重置</button>
-                        <button type="button" id="submit1" class="btn btn-default">查询</button>
-                    </form>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="driver1">名称</label>
+                        <input type="text" class="form-control" id="driver1" placeholder="请输入关键字">
+                    </div>
+                    <button type="reset" id="reset1" class="btn btn-default">重置</button>
+                    <button type="button" id="submit1" class="btn btn-default">查询</button>
+                </form>
+                <div>
+                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal1"
+                            style="height: 40px;width: 90px">
+                        导入
+                    </button>
+                    <!-- 模态框（Modal） -->
+                    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        ×
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel1">
+                                        导入excel
+                                    </h4>
+                                </div>
+                                <div class="modal-body"><!-- 在这里添加一些文本 -->
+                                    <form id="importFile1" name="importFile1" class="form-horizontal" method="post"
+                                          enctype="multipart/form-data">
+                                        <div>
+                                            <label class="control-label">请选择要导入的excel文件：</label>
+                                            <input id="excelFile1" name="excelFile1" class="file-loading" type="file"
+                                                   multiple accept=".xls,.xlsx">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+                </div>
             </div>
         </div>
         <div class="tab-pane fade" id="jmeter">
@@ -106,14 +173,13 @@
             <p>待开发</p>
         </div>
     </div>
-    <div calss="divider"></div>
-    <div id="isDisplay" style="display: none">
-        <!--定义table-->
-        <table id="table"></table>
-    </div>
 </div>
 </body>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.6/js/plugins/purify.min.js"
+        type="text/javascript"></script>
+<!-- popper.min.js below is needed if you use bootstrap 4.x. You can also use the bootstrap js
+   3.3.x versions without popper.min.js. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="../js/jquery-3.2.1/jquery-3.2.1.min.js"></script>
 <script src="../bootstrap/js/bootstrap.min.js"></script>
 <!-- bootstrap-table.min.js -->
@@ -124,16 +190,24 @@
 <!-- 日期控件-->
 <script src="https://cdn.bootcss.com/moment.js/2.22.0/moment-with-locales.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.6/js/fileinput.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.6/js/plugins/piexif.min.js"
+        type="text/javascript"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.6/js/fileinput.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.6/themes/fa/theme.js"></script>
 <script>
     $(function () {
         $('#myTab li:eq(1) a').tab('show');
         table();
         dataTimeRange();
+        dataTimeRange1();
     })
-    function table(){
+
+    function table() {
         $("#table").bootstrapTable({// 对应table标签的id
             method: 'post',
-            url: "/index", // 获取表格数据的url
+            url: "/index/selectPersonalProblemByCondition", // 获取表格数据的url
             contentType: "application/x-www-form-urlencoded",//一种编码。好像在post请求的时候需要用到。这里用的get请求，注释掉这句话也能拿到数据
             dataField: "data",//这是返回的json数组的key.默认是"rows".这里只有前后端约定好就行
             cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
@@ -169,22 +243,9 @@
                     sort: params.sort, // 要排序的字段
                     sortOrder: params.order, // 排序规则
                     search: params.search, //搜索框内容
-                    date: $("#date").val(),
-                    locomotive: $("#locomotive").val(),
-                    trainNumber: $("#trainNumber").val(),
-                    driver: $("#driver").val(),
-                    learningDriver: $("#learningDriver").val(),
-                    questionCategory: $("#questionCategory").val(),
-                    monitorAction: $("#monitorAction").val(),
-                    monitorProblem: $("#monitorProblem").val(),
-                    brakeProblem: $("#brakeProblem").val(),
-                    manipulationProblem: $("#manipulationProblem").val(),
-                    shuntingProblem: $("#shuntingProblem").val(),
-                    violationInfo: $("#violationInfo").val(),
-                    fixedResponsibility: $("#fixedResponsibility").val(),
-                    assessmentProcessing: $("#assessmentProcessing").val(),
-                    workshop: $("#workshop").val(),
-                    remarke: $("#remarke").val()
+                    beginTime: $("#date").val(),
+                    endTime: $("#date1").val(),
+                    name: $("#name").val(),
                 }
             },
             sortName: 'id', // 要排序的字段
@@ -197,94 +258,58 @@
                     valign: 'middle', // 上下居中
                     visible: true
                 }, {
-                    field: 'date',
-                    title: '日期',
+                    field: 'name',
+                    title: '名称',
                     align: 'center',
                     valign: 'middle'
                 }, {
-                    field: 'locomotive',
-                    title: '机车',
+                    field: 'fixedNumber',
+                    title: '固编',
                     align: 'center',      //设置单元格数据的左右对齐方式， 可选择的值有：’left’, ‘right’, ‘center’
                     valign: 'middle'   //设置单元格数据的上下对齐方式， 可选择的值有：’top’, ‘middle’, ‘bottom’
                 }, {
-                    field: 'trainNumber',
-                    title: "车次",
+                    field: 'subordinateTeam',
+                    title: "所属班组",
                     align: 'center',
                     valign: 'middle',
                 }, {
-                    field: 'driver', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '司机', // 表格表头显示文字
+                    field: 'checkingContent', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '检查内容', // 表格表头显示文字
                     align: 'center', // 左右居中
                     valign: 'middle', // 上下居中
                     visible: true
                 }, {
-                    field: 'learningDriver', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '学习司机', // 表格表头显示文字
+                    field: 'date', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '日期', // 表格表头显示文字
                     align: 'center', // 左右居中
                     valign: 'middle', // 上下居中
                     visible: true
                 }, {
-                    field: 'questionCategory', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '问题类别', // 表格表头显示文字
+                    field: 'trainNumber', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '车次', // 表格表头显示文字
                     align: 'center', // 左右居中
                     valign: 'middle', // 上下居中
                     visible: true
                 }, {
-                    field: 'monitorAction', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '监控器动作', // 表格表头显示文字
+                    field: 'locomotive', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '机车', // 表格表头显示文字
                     align: 'center', // 左右居中
                     valign: 'middle', // 上下居中
                     visible: true
                 }, {
-                    field: 'monitorProblem', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '监控器问题', // 表格表头显示文字
+                    field: 'existingProblems', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '存在问题', // 表格表头显示文字
                     align: 'center', // 左右居中
                     valign: 'middle', // 上下居中
                     visible: true
                 }, {
-                    field: 'brakeProblem', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '制动机问题', // 表格表头显示文字
+                    field: 'measures', // 要显示数据的字段名称，可以理解为json对象里的key
+                    title: '帮教措施', // 表格表头显示文字
                     align: 'center', // 左右居中
                     valign: 'middle', // 上下居中
                     visible: true
                 }, {
-                    field: 'manipulationProblem', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '操纵问题', // 表格表头显示文字
-                    align: 'center', // 左右居中
-                    valign: 'middle', // 上下居中
-                    visible: true
-                }, {
-                    field: 'shuntingProblem', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '调车问题', // 表格表头显示文字
-                    align: 'center', // 左右居中
-                    valign: 'middle', // 上下居中
-                    visible: true
-                }, {
-                    field: 'violationInfo', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '违标信息', // 表格表头显示文字
-                    align: 'center', // 左右居中
-                    valign: 'middle', // 上下居中
-                    visible: true
-                }, {
-                    field: 'fixedResponsibility', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '定责', // 表格表头显示文字
-                    align: 'center', // 左右居中
-                    valign: 'middle', // 上下居中
-                    visible: true
-                }, {
-                    field: 'assessmentProcessing', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '考核处理情况', // 表格表头显示文字
-                    align: 'center', // 左右居中
-                    valign: 'middle', // 上下居中
-                    visible: true
-                }, {
-                    field: 'workshop', // 要显示数据的字段名称，可以理解为json对象里的key
-                    title: '车间', // 表格表头显示文字
-                    align: 'center', // 左右居中
-                    valign: 'middle', // 上下居中
-                    visible: true
-                }, {
-                    field: 'remarke', // 要显示数据的字段名称，可以理解为json对象里的key
+                    field: 'remake', // 要显示数据的字段名称，可以理解为json对象里的key
                     title: '备注', // 表格表头显示文字
                     align: 'center', // 左右居中
                     valign: 'middle', // 上下居中
@@ -310,97 +335,143 @@
         //  $('#table').bootstrapTable('refresh');
     });
 
-    function dataTimeRange(){//日期范围
+    //日期选择
+    function dataTimeRange() {//日期范围
         $('#start').datetimepicker({
-            format:'YYYY-MM-DD',
+            format: 'YYYY-MM-DD',
             locale: moment.locale('zh-cn')
-        }).on('changeDate',function(e){
+        }).on('changeDate', function (e) {
             var startTime = e.date;
-            $('#end').datepicker('setStartDate',startTime);
+            $('#end').datepicker('setStartDate', startTime);
         });
 
         //结束时间
         $('#end').datetimepicker({
-            format:'YYYY-MM-DD',
+            format: 'YYYY-MM-DD',
             locale: moment.locale('zh-cn')
-        }).on('changeDate',function(e){
+        }).on('changeDate', function (e) {
             var endTime = e.date;
-            $('#start').datepicker('setEndDate',endTime);
+            $('#start').datepicker('setEndDate', endTime);
         });
     }
 
-    //初始化Excel导入的文件
-    function InitExcelFile() {
-        //记录GUID
-        $("#AttachGUID").val(newGuid());
-
-        $("#excelFile").fileinput({
-            uploadUrl: "/index/importPersonalProblem",//上传的地址
-            uploadAsync: true,              //异步上传
-            language: "zh",                 //设置语言
-            showCaption: true,              //是否显示标题
-            showUpload: true,               //是否显示上传按钮
-            showRemove: true,               //是否显示移除按钮
-            showPreview : true,             //是否显示预览按钮
-            browseClass: "btn btn-primary", //按钮样式
-            dropZoneEnabled: false,         //是否显示拖拽区域
-            allowedFileExtensions: ["xls", "xlsx"], //接收的文件后缀
-            maxFileCount: 1,                        //最大上传文件数限制
-            previewFileIcon: '<i class="glyphicon glyphicon-file"></i>',
-            allowedPreviewTypes: null,
-            previewFileIconSettings: {
-                'docx': '<i class="glyphicon glyphicon-file"></i>',
-                'xlsx': '<i class="glyphicon glyphicon-file"></i>',
-                'pptx': '<i class="glyphicon glyphicon-file"></i>',
-                'jpg': '<i class="glyphicon glyphicon-picture"></i>',
-                'pdf': '<i class="glyphicon glyphicon-file"></i>',
-                'zip': '<i class="glyphicon glyphicon-file"></i>',
-            },
-            uploadExtraData: {  //上传的时候，增加的附加参数
-                folder: '数据导入文件', guid: $("#AttachGUID").val()
-            }
-        })  //文件上传完成后的事件
-            .on('fileuploaded', function (event, data, previewId, index) {
-                var form = data.form, files = data.files, extra = data.extra,
-                    response = data.response, reader = data.reader;
-
-                var res = data.response; //返回结果
-                if (res.Success) {
-                    showTips('上传成功');
-                    var guid = $("#AttachGUID").val();
-
-                    //提示用户Excel格式是否正常，如果正常加载数据
-                    $.ajax({
-                        url: '/TestUser/CheckExcelColumns?guid=' + guid,
-                        type: 'get',
-                        dataType: 'json',
-                        success: function (data) {
-                            if (data.Success) {
-                                InitImport(guid); //重新刷新表格数据
-                                showToast("文件已上传，数据加载完毕！");
-
-                                //重新刷新GUID，以及清空文件，方便下一次处理
-                                RefreshExcel();
-                            }
-                            else {
-                                showToast("上传的Excel文件检查不通过。请根据页面右上角的Excel模板格式进行数据录入。", "error");
-                            }
-                        }
-                    });
-                }
-                else {
-                    showTips('上传失败');
-                }
-            });
-    }
-
-       /* $('#datetimepicker').datetimepicker({
+    //日期选择
+    function dataTimeRange1() {//日期范围
+        $('#start1').datetimepicker({
             format: 'YYYY-MM-DD',
             locale: moment.locale('zh-cn')
-        });*/
-        /*$('#datetimepicker2').datetimepicker({
-            format: 'YYYY-MM-DD hh:mm',
+        }).on('changeDate', function (e) {
+            var startTime = e.date;
+            $('#end1').datepicker('setStartDate', startTime);
+        });
+
+        //结束时间
+        $('#end1').datetimepicker({
+            format: 'YYYY-MM-DD',
             locale: moment.locale('zh-cn')
-        });*/
+        }).on('changeDate', function (e) {
+            var endTime = e.date;
+            $('#start1').datepicker('setEndDate', endTime);
+        });
+    }
+
+    //初始化Excel导入的文件  个人问题导入
+    initUpload("excelFile", "/index/importPersonalProblem");
+    function initUpload(ctrlName, uploadUrl) {
+        var control = $("#" + ctrlName);
+        control.fileinput({
+            language: "zh",//设置语言
+            uploadUrl: uploadUrl,//上传的地址
+            uploadAsync: true,//默认异步上传
+            showCaption: true,//是否显示标题
+            showUpload: true,//是否显示上传按钮
+            browseClass: "btn btn-primary",//按钮样式
+            allowedFileExtensions: ["xls", "xlsx"], //接收的文件后缀
+            maxFileCount: 1,//最大上传文件数限制
+            previewFileIcon: '<i class="glyphicon glyphcion-file"></i>',
+            showPreview: true, //是否显示预览
+// 									allowPreviewTypes:null,//是否显示预览
+            previewFileIconSettings: {
+                'docx': '<i class="glyphicon glyphcion-file"></i>',
+                'xlsx': '<i class="glyphicon glyphcion-file"></i>',
+                'pptx': '<i class="glyphicon glyphcion-file"></i>',
+                'jpg': '<i class="glyphicon glyphcion-picture"></i>',
+                'pdf': '<i class="glyphicon glyphcion-file"></i>',
+                'zip': '<i class="glyphicon glyphcion-file"></i>',
+            },
+            uploadExtraData: function () {
+                var extraValue = "test";
+                return {"excelType": extraValue};
+            }
+        });
+    }
+    $("#excelFile").on("fileuploaded", function (exevt, data, previewId, index) {
+        if (data.response.code == 200) {
+            alert("导入成功！");
+            $("#excelFile").fileinput("clear");
+            $("#excelFile").fileinput("reset");
+            $("#excelFile").fileinput("refresh");
+            $("#excelFile").fileinput("enable");
+            $(".close").click();
+            $("#reload").click();
+        } else {
+            alert("导入失败:" + data.response.message);
+            $("#excelFile").fileinput("clear");
+            $("#excelFile").fileinput("reset");
+            $("#excelFile").fileinput("refresh");
+            $("#excelFile").fileinput("enable");
+        }
+    });
+
+
+
+    //初始化Excel导入的文件  通知导入
+    initUpload("excelFile1", "/index/importNotice");
+    function initUpload(ctrlName, uploadUrl) {
+        var control = $("#" + ctrlName);
+        control.fileinput({
+            language: "zh",//设置语言
+            uploadUrl: uploadUrl,//上传的地址
+            uploadAsync: true,//默认异步上传
+            showCaption: true,//是否显示标题
+            showUpload: true,//是否显示上传按钮
+            browseClass: "btn btn-primary",//按钮样式
+            allowedFileExtensions: ["xls", "xlsx"], //接收的文件后缀
+            maxFileCount: 1,//最大上传文件数限制
+            previewFileIcon: '<i class="glyphicon glyphcion-file"></i>',
+            showPreview: true, //是否显示预览
+// 									allowPreviewTypes:null,//是否显示预览
+            previewFileIconSettings: {
+                'docx': '<i class="glyphicon glyphcion-file"></i>',
+                'xlsx': '<i class="glyphicon glyphcion-file"></i>',
+                'pptx': '<i class="glyphicon glyphcion-file"></i>',
+                'jpg': '<i class="glyphicon glyphcion-picture"></i>',
+                'pdf': '<i class="glyphicon glyphcion-file"></i>',
+                'zip': '<i class="glyphicon glyphcion-file"></i>',
+            },
+            uploadExtraData: function () {
+                var extraValue = "test";
+                return {"excelType": extraValue};
+            }
+        });
+    }
+    $("#excelFile1").on("fileuploaded", function (exevt, data, previewId, index) {
+        if (data.response.code == 200) {
+            alert("导入成功！");
+            $("#excelFile1").fileinput("clear");
+            $("#excelFile1").fileinput("reset");
+            $("#excelFile1").fileinput("refresh");
+            $("#excelFile1").fileinput("enable");
+            $(".close").click();
+            $("#reload").click();
+        } else {
+            alert("导入失败:" + data.response.message);
+            $("#excelFile1").fileinput("clear");
+            $("#excelFile1").fileinput("reset");
+            $("#excelFile1").fileinput("refresh");
+            $("#excelFile1").fileinput("enable");
+        }
+    });
+
 </script>
 </html>

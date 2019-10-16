@@ -3,10 +3,7 @@ package com.test.xg.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.test.xg.bean.Notice;
-import com.test.xg.bean.PersonalProblem;
-import com.test.xg.bean.Xg;
-import com.test.xg.bean.XgParam;
+import com.test.xg.bean.*;
 import com.test.xg.mapper.XgMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,12 +40,22 @@ public class XgService {
     @Transactional(rollbackFor = Exception.class)
     public void importPersonalProblem(List<PersonalProblem> personalProblemList) {
         List<List<PersonalProblem>> listArrayList=new ArrayList<List<PersonalProblem>>();
-        for(int i=0;i<personalProblemList.size()/10+1;i++){
+        int count=10;
+        int init=0;
+        for(int i=0;i<(personalProblemList.size()/10+1);i++){
             List<PersonalProblem> personalProblems=new ArrayList<PersonalProblem>();
-            for(int j=0;j<personalProblemList.size();j++){
-                personalProblems.add(personalProblemList.get(i));
+            for(int j=init;j<count;j++){
+                personalProblems.add(personalProblemList.get(j));
             }
             listArrayList.add(personalProblems);
+            init=count;
+            count=count+10;
+            if(init>=personalProblemList.size()){
+                break;
+            }
+            if(count>personalProblemList.size()){
+                count=personalProblemList.size();
+            }
         }
         for(List<PersonalProblem> personalProblems:listArrayList){
             xgMapper.importPersonalProblem(personalProblems);
@@ -58,15 +65,35 @@ public class XgService {
     @Transactional(rollbackFor = Exception.class)
     public void importNotice(List<Notice> noticeList) {
         List<List<Notice>> listArrayList=new ArrayList<List<Notice>>();
-        for(int i=0;i<noticeList.size()/10+1;i++){
-            List<Notice> notices=new ArrayList<Notice>();
-            for(int j=0;j<noticeList.size();j++){
-                notices.add(noticeList.get(i));
+        int count=10;
+        int init=0;
+        for(int i=0;i<(noticeList.size()/10+1);i++){
+            List<Notice> noticeArrayList=new ArrayList<Notice>();
+            for(int j=init;j<count;j++){
+                noticeArrayList.add(noticeList.get(j));
             }
-            listArrayList.add(notices);
+            listArrayList.add(noticeArrayList);
+            init=count;
+            count=count+10;
+            if(init>=noticeList.size()){
+                break;
+            }
+            if(count>noticeList.size()){
+                count=noticeList.size();
+            }
         }
         for(List<Notice> notices:listArrayList){
             xgMapper.importNotice(notices);
         }
+    }
+
+    public HashMap<String, Object> selectPersonalProblemByCondition(PersonalProblemDto personalProblemDto) {
+        HashMap<String,Object> hashMap=new HashMap<>();
+        PageHelper.startPage(personalProblemDto.getPageNum(),personalProblemDto.getPageSize(),true);
+        List<PersonalProblem> personalProblems = xgMapper.selectPersonalProblemByCondition(personalProblemDto);
+        PageInfo<PersonalProblem> pageInfo=new PageInfo<>(personalProblems);
+        hashMap.put("total",pageInfo.getTotal());
+        hashMap.put("data",pageInfo.getList());
+        return hashMap;
     }
 }

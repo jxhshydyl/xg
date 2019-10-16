@@ -41,7 +41,8 @@ public class CheckObjectIsNullUtils {
             }
             //只要有一个属性值不为null 就返回true
             if ((fieldValue != null && !"".equals(fieldValue))
-                    && !"id".equals(fieldName) &&!"name".equals(fieldName) && !"subordinateTeam".equals(fieldName) && !"fixedNumber".equals(fieldName)) {
+                    && !"id".equals(fieldName) &&!"name".equals(fieldName) && !"subordinateTeam".equals(fieldName) && !"fixedNumber".equals(fieldName)
+            && !"checkingContent".equals(fieldName)) {
                 flag = true;
                 break;
             }

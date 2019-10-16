@@ -1,9 +1,7 @@
 package com.test.xg.mapper;
 
-import com.test.xg.bean.Notice;
-import com.test.xg.bean.PersonalProblem;
-import com.test.xg.bean.Xg;
-import com.test.xg.bean.XgParam;
+import com.test.xg.bean.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,7 +11,9 @@ public interface XgMapper {
 
     List<Xg> selectXgByCondition(XgParam xgParam);
 
-    int importPersonalProblem(List<PersonalProblem> personalProblemList);
+    int importPersonalProblem(@Param("personalProblemList")List<PersonalProblem> personalProblemList);
 
-    int importNotice(List<Notice> noticeList);
+    int importNotice(@Param("noticeList")List<Notice> noticeList);
+
+    List<PersonalProblem> selectPersonalProblemByCondition(PersonalProblemDto personalProblemDto);
 }

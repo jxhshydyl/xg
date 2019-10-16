@@ -1,21 +1,14 @@
 package com.test.xg.controller;
 
-import com.test.xg.bean.Notice;
-import com.test.xg.bean.PersonalProblem;
-import com.test.xg.bean.XgParam;
+import com.test.xg.bean.*;
 import com.test.xg.service.XgService;
 import com.test.xg.util.CheckObjectIsNullUtils;
 import com.test.xg.util.ImportExcelUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,9 +44,10 @@ public class IndexController {
     }
 
     @PostMapping("/importPersonalProblem")
-    public void importPersonalProblem(HttpServletRequest request, HttpServletResponse response, MultipartFile file){
+    @ResponseBody
+    public ResultDto importPersonalProblem(@RequestParam(value="excelFile",required=false) MultipartFile file){
         try {
-            if(file.isEmpty()){
+            if(file==null||file.isEmpty()){
                 throw new RuntimeException("文件不能为空！");
             }
             String fileName = file.getName();
@@ -105,11 +99,26 @@ public class IndexController {
             xgService.importPersonalProblem(personalProblemList);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResultDto().error();
         }
+        return new ResultDto().ok();
+    }
+
+    @PostMapping("/selectPersonalProblemByCondition")
+    @ResponseBody
+    public HashMap<String,Object> selectPersonalProblemByCondition(PersonalProblemDto personalProblemDto){
+        try {
+            HashMap<String, Object> hashMap = xgService.selectPersonalProblemByCondition(personalProblemDto);
+            return hashMap;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @PostMapping("/importNotice")
-    public void importNotice(HttpServletRequest request, HttpServletResponse response, MultipartFile file){
+    @ResponseBody
+    public ResultDto importNotice(@RequestParam(value="excelFile1",required=false)MultipartFile file){
         try {
             if(file.isEmpty()){
                 throw new RuntimeException("文件不能为空！");
@@ -131,6 +140,8 @@ public class IndexController {
             xgService.importNotice(noticeList);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResultDto().error();
         }
+        return new ResultDto().ok();
     }
 }
