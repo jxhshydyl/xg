@@ -16,4 +16,6 @@ public interface XgMapper {
     int importNotice(@Param("noticeList")List<Notice> noticeList);
 
     List<PersonalProblem> selectPersonalProblemByCondition(PersonalProblemDto personalProblemDto);
+
+    List<Notice> selectNotice(NoticeDto noticeDto);
 }

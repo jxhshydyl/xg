@@ -108,6 +108,9 @@ public class IndexController {
     @ResponseBody
     public HashMap<String,Object> selectPersonalProblemByCondition(PersonalProblemDto personalProblemDto){
         try {
+            if(personalProblemDto.getName() == null || "".equals(personalProblemDto.getName())){
+                throw new RuntimeException("参数不能为空");
+            }
             HashMap<String, Object> hashMap = xgService.selectPersonalProblemByCondition(personalProblemDto);
             return hashMap;
         }catch (Exception e){
@@ -143,5 +146,22 @@ public class IndexController {
             return new ResultDto().error();
         }
         return new ResultDto().ok();
+    }
+
+    @PostMapping("/selectNotice")
+    @ResponseBody
+    public ResultDto selectNotice(NoticeDto noticeDto){
+        ResultDto resultDto = new ResultDto();
+        try {
+            if(noticeDto.getNotice() == null || "".equals(noticeDto.getNotice())){
+                return resultDto.error();
+            }
+            List<Notice> notices = xgService.selectNotice(noticeDto);
+            resultDto.setData(notices);
+            return resultDto.ok();
+        }catch (Exception e){
+            e.printStackTrace();
+            return resultDto.error();
+        }
     }
 }

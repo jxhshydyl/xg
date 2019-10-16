@@ -96,4 +96,9 @@ public class XgService {
         hashMap.put("data",pageInfo.getList());
         return hashMap;
     }
+
+    public List<Notice> selectNotice(NoticeDto noticeDto) {
+        List<Notice> notices = xgMapper.selectNotice(noticeDto);
+        return notices;
+    }
 }

@@ -22,29 +22,13 @@
     <ul id="myTab" class="nav nav-tabs">
         <li class="active"><a href="#home" data-toggle="tab">个人问题</a></li>
         <li><a href="#ios" data-toggle="tab">业务学习</a></li>
-        <li class="dropdown">
-            <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">
-                待开发
-                <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
-                <li>
-                    <a href="#jmeter" tabindex="-1" data-toggle="tab">
-                        待开发
-                    </a>
-                </li>
-                <li>
-                    <a href="#ejb" tabindex="-1" data-toggle="tab">
-                        待开发
-                    </a>
-                </li>
-            </ul>
-        </li>
+        <li><a href="#jmeter" id="myTabDrop1" data-toggle="tab">近期传达</a></li>
+        <li><a href="#ejb" id="daikaifa" data-toggle="tab">待开发</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade in active" id="home">
             <div style="margin-left: 150px;margin-top: 30px">
-                <form class="form-inline" role="form">
+                <form class="form-inline" role="form" style="display: inline-block">
                     <div class='input-group date' id='start'>
                         <input type='text' class="form-control" placeholder="请输入日期" id="date"/>
                         <span class="input-group-addon">
@@ -67,11 +51,8 @@
                         <button type="button" id="submit" class="btn btn-default">查询</button>
                     </div>
                 </form>
+                <button class="btn btn-default" data-toggle="modal" data-target="#myModal">导入</button>
                 <div>
-                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal"
-                            style="height: 40px;width: 90px">
-                        导入
-                    </button>
                     <!-- 模态框（Modal） -->
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                          aria-hidden="true">
@@ -101,15 +82,16 @@
                         </div><!-- /.modal -->
                     </div>
                 </div>
-                <div id="isDisplay">
+                <div id="isDisplay" style="display: none">
                     <!--定义table-->
                     <table id="table"></table>
                 </div>
             </div>
+            <img src="../photo/6.jpg" id="personProblem" style="margin: 10px 1px 0px 1px;width: 100%;">
         </div>
         <div class="tab-pane fade" id="ios">
             <div style="margin-left: 150px;margin-top: 30px;">
-                <form class="form-inline" role="form">
+                <form class="form-inline" role="form" style="display: inline-block">
                     <div class='input-group date' id='start1'>
                         <input type='text' class="form-control" placeholder="请输入日期" id="date2"/>
                         <span class="input-group-addon">
@@ -124,17 +106,14 @@
                             </span>
                     </div>
                     <div class="form-group">
-                        <label class="sr-only" for="driver1">名称</label>
-                        <input type="text" class="form-control" id="driver1" placeholder="请输入关键字">
+                        <label class="sr-only" for="notice">名称</label>
+                        <input type="text" class="form-control" id="notice" placeholder="请输入关键字">
                     </div>
                     <button type="reset" id="reset1" class="btn btn-default">重置</button>
                     <button type="button" id="submit1" class="btn btn-default">查询</button>
                 </form>
+                <button class="btn btn-default" data-toggle="modal" data-target="#myModal1">导入</button>
                 <div>
-                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal1"
-                            style="height: 40px;width: 90px">
-                        导入
-                    </button>
                     <!-- 模态框（Modal） -->
                     <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                          aria-hidden="true">
@@ -165,6 +144,9 @@
                     </div>
                 </div>
             </div>
+            <img src="../photo/7.jpg" id="study" style="margin: 10px 1px 0px 1px;width: 100%;">
+            <ul id="vocationalStudy" style="margin: 10px">
+            </ul>
         </div>
         <div class="tab-pane fade" id="jmeter">
             <p>待开发</p>
@@ -332,9 +314,31 @@
         //查询之后重新从第一页算起
         $('#table').bootstrapTable('refreshOptions', {pageNumber: 1, pageSize: 10});
         //刷新
+        $('#isDisplay').css("display","");
+        $('#personProblem').css("display","none");
         //  $('#table').bootstrapTable('refresh');
     });
 
+    //查询
+    $('#submit1').click(function () {
+        $.ajax({
+            type: "POST",
+            url: "/index/selectNotice",
+            data: {beginTime:$("#date2").val(), endTime:$("#date3").val(),notice:$("#notice").val()},
+            dataType: "json",
+            success: function(data){
+                if(data.code == 200){
+                    $('#resText').empty();   //清空resText里面的所有内容
+                    var html = '';
+                    for(var i=0;i<data.data.length;i++){
+                        html += '<li>'+data.data[i].notice+'</li>';
+                    }
+                    $('#study').css("display","none");
+                    $('#vocationalStudy').html(html);
+                }
+            }
+        });
+    });
     //日期选择
     function dataTimeRange() {//日期范围
         $('#start').datetimepicker({

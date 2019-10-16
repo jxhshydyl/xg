@@ -98,4 +98,20 @@
             </if>
         </where>
     </select>
+
+    <select id="selectNotice" resultType="com.test.xg.bean.Notice">
+        select id,date,notice from notice
+        <where>
+            <if test="beginTime != null and beginTime != ''">
+                and `date` &gt;= #{beginTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and `date` &lt;= #{endTime}
+            </if>
+            <if test="notice != null and notice != '' ">
+                and `notice` like CONCAT(CONCAT('%',#{notice}),'%')
+            </if>
+        </where>
+    </select>
+
 </mapper>
