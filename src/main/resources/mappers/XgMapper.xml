@@ -61,4 +61,23 @@
            </if>
        </where>
     </select>
+
+
+    <insert id="importPersonalProblem">
+        INSERT INTO `xg`.`personal_problem`
+        (`name`, `fixed_number`, `subordinate_team`, `checking_content`, `date`, `train_number`, `locomotive`, `existing_problems`, `measures`)
+        VALUES
+        <foreach collection="personalProblemList" item="personalProblem" separator="," close=";">
+            (#{personalProblem.name},#{personalProblem.fixedNumber},#{personalProblem.subordinateTeam},#{personalProblem.checkingContent}
+            ,#{personalProblem.date},#{personalProblem.trainNumber},#{personalProblem.locomotive},#{personalProblem.existingProblems},#{personalProblem.measures})
+        </foreach>
+    </insert>
+
+    <insert id="importNotice">
+        INSERT INTO `xg`.`notice` (`date`, `notice`)
+        VALUES
+        <foreach collection="noticeList" item="notice" separator="," close=";">
+            (#{notice.date},#{notice.notice})
+        </foreach>
+    </insert>
 </mapper>

@@ -3,12 +3,15 @@ package com.test.xg.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.test.xg.bean.Notice;
+import com.test.xg.bean.PersonalProblem;
 import com.test.xg.bean.Xg;
 import com.test.xg.bean.XgParam;
 import com.test.xg.mapper.XgMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,5 +35,16 @@ public class XgService {
         hashMap.put("total",pageInfo.getTotal());
         hashMap.put("data",pageInfo.getList());
         return hashMap;
+    }
+
+    public void importPersonalProblem(List<PersonalProblem> personalProblemList) {
+        List<PersonalProblem> personalProblems=new ArrayList<PersonalProblem>();
+        for(int i=0;i<personalProblemList.size();i++){
+            xgMapper.importPersonalProblem(personalProblemList);
+        }
+    }
+
+    public void importNotice(List<Notice> noticeList) {
+        xgMapper.importNotice(noticeList);
     }
 }
