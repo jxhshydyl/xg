@@ -10,7 +10,10 @@ import com.test.xg.bean.XgParam;
 import com.test.xg.mapper.XgMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,14 +40,33 @@ public class XgService {
         return hashMap;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void importPersonalProblem(List<PersonalProblem> personalProblemList) {
-        List<PersonalProblem> personalProblems=new ArrayList<PersonalProblem>();
-        for(int i=0;i<personalProblemList.size();i++){
-            xgMapper.importPersonalProblem(personalProblemList);
+        List<List<PersonalProblem>> listArrayList=new ArrayList<List<PersonalProblem>>();
+        for(int i=0;i<personalProblemList.size()/10+1;i++){
+            List<PersonalProblem> personalProblems=new ArrayList<PersonalProblem>();
+            for(int j=0;j<personalProblemList.size();j++){
+                personalProblems.add(personalProblemList.get(i));
+            }
+            listArrayList.add(personalProblems);
+        }
+        for(List<PersonalProblem> personalProblems:listArrayList){
+            xgMapper.importPersonalProblem(personalProblems);
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void importNotice(List<Notice> noticeList) {
-        xgMapper.importNotice(noticeList);
+        List<List<Notice>> listArrayList=new ArrayList<List<Notice>>();
+        for(int i=0;i<noticeList.size()/10+1;i++){
+            List<Notice> notices=new ArrayList<Notice>();
+            for(int j=0;j<noticeList.size();j++){
+                notices.add(noticeList.get(i));
+            }
+            listArrayList.add(notices);
+        }
+        for(List<Notice> notices:listArrayList){
+            xgMapper.importNotice(notices);
+        }
     }
 }
