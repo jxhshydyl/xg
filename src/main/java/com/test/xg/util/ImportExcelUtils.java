@@ -95,12 +95,12 @@ public class ImportExcelUtils {
         case Cell.CELL_TYPE_STRING:  
             value = cell.getRichStringCellValue().getString();  
             break;  
-        case Cell.CELL_TYPE_NUMERIC:  
-            if("General".equals(cell.getCellStyle().getDataFormatString())){  
+        case Cell.CELL_TYPE_NUMERIC:
+            if("General".equals(cell.getCellStyle().getDataFormatString())){
                 value = df.format(cell.getNumericCellValue());  
             }else if("m/d/yy".equals(cell.getCellStyle().getDataFormatString())){  
                 value = sdf.format(cell.getDateCellValue());  
-            }else if("yyyy-mm-dd".equals(cell.getCellStyle().getDataFormatString())){
+            }else if("yyyy\\-mm\\-dd".equals(cell.getCellStyle().getDataFormatString())){
                 value = sdf.format(cell.getDateCellValue());
             }else{
                 value = df2.format(cell.getNumericCellValue());  

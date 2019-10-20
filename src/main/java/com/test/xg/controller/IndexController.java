@@ -4,8 +4,10 @@ import com.test.xg.bean.*;
 import com.test.xg.service.XgService;
 import com.test.xg.util.CheckObjectIsNullUtils;
 import com.test.xg.util.ImportExcelUtils;
+import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,6 +69,9 @@ public class IndexController {
             for(List<List<Object>> listList:bankListByExcel){
                 for(int i=0;i<listList.size();i++){
                     List<Object> list=listList.get(i);
+                    if(list.size() <7){
+                        continue;
+                    }
                     if(i == 0){
                         name = (String)list.get(1);
                         fixedNumber = (String)list.get(4);
@@ -80,15 +85,15 @@ public class IndexController {
                         i6 = list.indexOf("帮教措施");
                     }else{
                         PersonalProblem personalProblem=new PersonalProblem();
-                        personalProblem.setName(name);
-                        personalProblem.setFixedNumber(fixedNumber);
-                        personalProblem.setSubordinateTeam(subordinateTeam);
-                        personalProblem.setCheckingContent((String)list.get(i1));
-                        personalProblem.setDate((String)list.get(i2));
-                        personalProblem.setTrainNumber((String)list.get(i3));
-                        personalProblem.setLocomotive((String)list.get(i4));
-                        personalProblem.setExistingProblems((String)list.get(i5));
-                        personalProblem.setMeasures((String)list.get(i6));
+                        personalProblem.setName(StringUtils.isEmpty(name)?"":name);
+                        personalProblem.setFixedNumber(StringUtils.isEmpty(fixedNumber)?"":fixedNumber);
+                        personalProblem.setSubordinateTeam(StringUtils.isEmpty(subordinateTeam)?"":subordinateTeam);
+                        personalProblem.setCheckingContent(StringUtils.isEmpty(list.get(i1))?"":(String)list.get(i1));
+                        personalProblem.setDate(StringUtils.isEmpty(list.get(i2))?"":(String)list.get(i2));
+                        personalProblem.setTrainNumber(StringUtils.isEmpty(list.get(i3))?"":(String)list.get(i3));
+                        personalProblem.setLocomotive(StringUtils.isEmpty((String)list.get(i4))?"":(String)list.get(i4));
+                        personalProblem.setExistingProblems(StringUtils.isEmpty((String)list.get(i5))?"":(String)list.get(i5));
+                        personalProblem.setMeasures(StringUtils.isEmpty((String)list.get(i6))?"":(String)list.get(i6));
                         boolean b = CheckObjectIsNullUtils.objCheckFieldIsNotNull(personalProblem);
                         if(b){
                             personalProblemList.add(personalProblem);
