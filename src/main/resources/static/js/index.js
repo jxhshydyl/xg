@@ -3,6 +3,7 @@ $(function () {
     table();
     dataTimeRange();
     dataTimeRange1();
+    dataTimeRange2();
 })
 
 function table() {
