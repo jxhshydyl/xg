@@ -101,4 +101,29 @@ public class XgService {
         List<Notice> notices = xgMapper.selectNotice(noticeDto);
         return notices;
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void importRecentConvey(List<RecentConvey> recentConveyList) {
+        List<List<RecentConvey>> listArrayList=new ArrayList<List<RecentConvey>>();
+        int count=10;
+        int init=0;
+        for(int i=0;i<(recentConveyList.size()/10+1);i++){
+            List<RecentConvey> recentConveyArrayList=new ArrayList<RecentConvey>();
+            for(int j=init;j<count;j++){
+                recentConveyArrayList.add(recentConveyList.get(j));
+            }
+            listArrayList.add(recentConveyArrayList);
+            init=count;
+            count=count+10;
+            if(init>=recentConveyList.size()){
+                break;
+            }
+            if(count>recentConveyList.size()){
+                count=recentConveyList.size();
+            }
+        }
+        for(List<RecentConvey> recentConveys:listArrayList){
+            xgMapper.importRecentConvey(recentConveys);
+        }
+    }
 }

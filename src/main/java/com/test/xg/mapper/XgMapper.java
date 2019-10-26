@@ -18,4 +18,6 @@ public interface XgMapper {
     List<PersonalProblem> selectPersonalProblemByCondition(PersonalProblemDto personalProblemDto);
 
     List<Notice> selectNotice(NoticeDto noticeDto);
+
+    int importRecentConvey(@Param("recentConveyList") List<RecentConvey> recentConveyList);
 }

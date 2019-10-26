@@ -114,4 +114,12 @@
         </where>
     </select>
 
+    <insert id="importRecentConvey">
+        INSERT INTO `xg`.`recent_convey` (`date`, `notice`)
+        VALUES
+        <foreach collection="recentConveyList" item="recentConvey" separator="," close=";">
+            (#{recentConvey.date},#{recentConvey.notice})
+        </foreach>
+    </insert>
+
 </mapper>

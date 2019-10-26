@@ -52,7 +52,6 @@ public class IndexController {
             if(file==null||file.isEmpty()){
                 throw new RuntimeException("文件不能为空！");
             }
-            String fileName = file.getName();
             InputStream inputStream = file.getInputStream();
             ImportExcelUtils importExcelUtils=new ImportExcelUtils();
             List<List<List<Object>>> bankListByExcel = importExcelUtils.getBankListByExcel(inputStream, "test.xls");
@@ -131,7 +130,6 @@ public class IndexController {
             if(file.isEmpty()){
                 throw new RuntimeException("文件不能为空！");
             }
-            String fileName = file.getName();
             InputStream inputStream = file.getInputStream();
             ImportExcelUtils importExcelUtils=new ImportExcelUtils();
             List<List<List<Object>>> bankListByExcel = importExcelUtils.getBankListByExcel(inputStream, "test.xls");
@@ -168,5 +166,33 @@ public class IndexController {
             e.printStackTrace();
             return resultDto.error();
         }
+    }
+
+    @PostMapping("/importRecentConvey")
+    @ResponseBody
+    public ResultDto importRecentConvey(@RequestParam(value="excelFile2",required=false)MultipartFile file){
+        try {
+            if(file.isEmpty()){
+                throw new RuntimeException("文件不能为空！");
+            }
+            InputStream inputStream = file.getInputStream();
+            ImportExcelUtils importExcelUtils=new ImportExcelUtils();
+            List<List<List<Object>>> bankListByExcel = importExcelUtils.getBankListByExcel(inputStream, "test.xls");
+            List<RecentConvey> recentConveyList=new ArrayList<RecentConvey>();
+            for(List<List<Object>> listList:bankListByExcel){
+                for(int i=0;i<listList.size();i++){
+                    List<Object> list=listList.get(i);
+                    RecentConvey recentConvey=new RecentConvey();
+                    recentConvey.setDate((String)list.get(0));
+                    recentConvey.setNotice((String)list.get(1));
+                    recentConveyList.add(recentConvey);
+                }
+            }
+            xgService.importRecentConvey(recentConveyList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultDto().error();
+        }
+        return new ResultDto().ok();
     }
 }
